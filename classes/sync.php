@@ -47,26 +47,25 @@ class sync
     }
     
     private function _run_sync($rocketchatcourse) {
-        error_log("running sync for  " . $rocketchatcourse->course);
-        // if($this->client->authenticated) {
-        //     $channelapi = new \local_rocketchat\integration\channels($this->client);
-        //     $channelapi->create($rocketchatcourse);
-        //     $this->errors = array_merge($this->errors, $channelapi->errors);
+        if($this->client->authenticated) {
+            $channelapi = new \local_rocketchat\integration\channels($this->client);
+            $channelapi->create($rocketchatcourse);
+            $this->errors = array_merge($this->errors, $channelapi->errors);
 
-        //     $userapi = new \local_rocketchat\integration\users($this->client);
-        //     $userapi->create($rocketchatcourse);
-        //     $this->errors = array_merge($this->errors, $userapi->errors);
+            $userapi = new \local_rocketchat\integration\users($this->client);
+            $userapi->create($rocketchatcourse);
+            $this->errors = array_merge($this->errors, $userapi->errors);
 
-        //     $subscriptionapi = new \local_rocketchat\integration\subscriptions($this->client);
-        //     $subscriptionapi->create($rocketchatcourse);
-        //     $this->errors = array_merge($this->errors, $subscriptionapi->errors);
-        // } 
-        // else {
-        //     $object = new \stdClass();
-        //     $object->code = 'Rocket.Chat Integration - authentication failure';
-        //     $object->error = 'Failed to establish a client connection with the Rocket.Chat server';
-        //     array_push($this->errors, $object);
-        // }
+            $subscriptionapi = new \local_rocketchat\integration\subscriptions($this->client);
+            $subscriptionapi->create($rocketchatcourse);
+            $this->errors = array_merge($this->errors, $subscriptionapi->errors);
+        } 
+        else {
+            $object = new \stdClass();
+            $object->code = 'Rocket.Chat Integration - authentication failure';
+            $object->error = 'Failed to establish a client connection with the Rocket.Chat server';
+            array_push($this->errors, $object);
+        }
     }
 
     private function _record_result($rocketchatcourse) {
