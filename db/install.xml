@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/rocketchat/db" VERSION="20160418" COMMENT="XMLDB file for Moodle local/rocketchat">
+  <TABLES>
+    <TABLE NAME="local_rocketchat_courses" COMMENT="Stores courses that are pending sync to rocket chat">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="pendingsync" TYPE="int" LENGTH="10" NOTNULL="true" default="0" SEQUENCE="false"/>
+        <FIELD NAME="lastsync" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="error" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_rocketchat_roles" COMMENT="Stores information about what roles need to be included in rocket chat sync">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+        <FIELD NAME="role" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="requiresync" TYPE="int" LENGTH="10" NOTNULL="true" default="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="role" UNIQUE="false" FIELDS="role"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
