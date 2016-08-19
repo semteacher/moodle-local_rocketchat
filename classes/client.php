@@ -29,7 +29,7 @@ class client
     private function authenticate() {
         $response = $this->request_login_credentials();
         
-        if($response->status == 'success') {
+        if($response && $response->status == 'success') {
             $this->store_credentials($response->data);            
             $this->authenticated = true;
         }

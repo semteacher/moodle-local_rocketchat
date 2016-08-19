@@ -35,6 +35,23 @@ class sync
         $this->_record_result($rocketchatcourse);
     }
 
+    public function sync_enrolment_status($userenrolmentid) {
+        global $DB;
+
+        if($this->client->authenticated) {        
+            $userenrolment = $DB->get_record('user_enrolments', array("id" => $userenrolmentid));
+
+            $userapi = new \local_rocketchat\integration\users($this->client);
+
+            if($userenrolment->status == "1") {
+                $userapi->activate_user($userenrolment->userid);
+            } 
+            else {
+                $userapi->deactivate_user($userenrolment->userid);
+            }
+        }
+    }
+
     private function create_rocketchat_course($courseid) {
         global $DB;
 

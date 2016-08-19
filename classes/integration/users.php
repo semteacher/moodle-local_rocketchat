@@ -16,26 +16,27 @@ class users
     }
 
     public function create($rocketchatcourse) {
-        global $CFG, $DB;
-
-        $course = $DB->get_record('course', array("id" => $rocketchatcourse->course));
-        $users =  \core_enrol_external::get_enrolled_users($course->id);
+        $users =  \core_enrol_external::get_enrolled_users($rocketchatcourse->course);
         $users = json_decode(json_encode($users), FALSE );
 
         foreach ($users as $user) {
-            $this->_create($user);
+            if(!$this->_user_exists($user))
+            {
+                $this->_create_user($user);
+            } 
         }
     }
 
-    private function _create($user) {
-        if(!$this->_user_exists($user))
-        {
-            $response = $this->_create_user($user);
-        } 
+    public function deactivate_user($userid) {
+        $this->_update_user_activity($userid, true);
+    }
+
+    public function activate_user($userid) {
+        $this->_update_user_activity($userid, false);
     }
 
     private function _user_exists($user) {
-        foreach ($this->_existingusers() as $existinguser) {
+        foreach ($this->_existing_users() as $existinguser) {
             $username = $user->username;
             if(count(explode('@',$user->email)) > 1) {
                 $username = explode('@',$user->email)[0];
@@ -49,7 +50,7 @@ class users
         return false;
     }
 
-    private function _existingusers() {
+    private function _existing_users() {
         global $CFG;
 
         $url = $this->client->host . '/api/v2/users';
@@ -58,18 +59,46 @@ class users
 
         $request->setHeader($this->client->authentication_headers());
         $request->setHeader(array('Content-Type: application/json'));
-        
+
         $response = $request->get($url);
         $response = json_decode($response);        
 
         return $response->users;
     }
 
+    private function _get_user($userid) {
+        global $DB;
+
+        $user = $DB->get_record('user', array("id" => $userid));
+        
+        $username = $user->username;
+
+        if(count(explode('@',$user->email)) > 1) {
+            $username = explode('@',$user->email)[0];
+        }
+        
+        $url = $this->client->host . '/api/v2/users?filter[username]=' . $username;
+        $request = new \curl();        
+
+        $request->setHeader($this->client->authentication_headers());
+
+        $response = $request->get($url);
+        $response = json_decode($response);        
+
+        $rocketchatuser = null;
+
+        if($response->users) {
+            $rocketchatuser = $response->users[0];
+        }
+
+        return $rocketchatuser;
+    }
+
     private function _create_user($user) {
         global $CFG;
 
         $url = $this->client->host . "/api/v2/users";
-        
+
         $data = array(
             "name" => $user->firstname . " " . $user->lastname,
             "username" => explode('@',$user->email)[0],
@@ -85,16 +114,32 @@ class users
 
         $request->setHeader($this->client->authentication_headers());
         $request->setHeader(array('Content-Type: application/json'));
-        
+
         $response = $request->post($url, json_encode($data));
         $response = json_decode($response);        
-        
+
         if(!$response->success) {
             $object = new \stdClass();
             $object->code = 'Rocket.Chat Integration - user creation';
             $object->error = "[ user_id - " . $user->id . " | email - " . $user->email . "]" . $response->error;
 
             array_push($this->errors, $object);
+        }
+    }
+
+    private function _update_user_activity($userid, $isactive) {
+        $rocketchatuser = $this->_get_user($userid);
+
+        if($rocketchatuser) {
+            $url = $this->client->host . "/api/v2/users/" . $rocketchatuser->_id;
+            $data = array("active" => $isactive);
+            $request = new \curl();        
+
+            $request->setHeader($this->client->authentication_headers());
+            $request->setHeader(array('Content-Type: application/json'));
+
+            $response = $request->post($url, json_encode($data));
+            $response = json_decode($response);     
         }
     }
 }

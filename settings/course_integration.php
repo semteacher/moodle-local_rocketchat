@@ -42,7 +42,11 @@ foreach ($courses as $course) {
     foreach ($rocketchatenabledcourses as $rocketchatcourse) {
         if ($course->id == $rocketchatcourse->courseid) {
             echo html_writer::start_tag('tr');
-            echo html_writer::tag('td', $course->fullname);
+            echo html_writer::start_tag('td');
+            $courseurl =  new moodle_url($CFG->wwwroot . '/course/view.php', array('id'=>$course->id));
+            echo html_writer::tag('a', $course->fullname, array('href' => $courseurl));
+            echo html_writer::end_tag('td');
+
             echo html_writer::start_tag('td');
             echo html_writer::checkbox('pendingsync', null, $rocketchatcourse->pendingsync, '', array('data-courseid'=> $course->id));
             echo html_writer::end_tag('td');
@@ -56,7 +60,7 @@ foreach ($courses as $course) {
                 echo userdate($rocketchatcourse->lastsync, '%Y/%m/%d, %H:%M');
                 
                 if($rocketchatcourse->error) {
-                    echo html_writer::tag('i', '', array('class' => 'icon icon-warning-sign', 'title' => $rocketchatcourse->error));
+                    echo html_writer::tag('span', ' ...', array('title' => $rocketchatcourse->error));
                 } 
 
                 echo html_writer::end_tag('div');
