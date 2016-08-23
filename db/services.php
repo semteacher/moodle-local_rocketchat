@@ -23,6 +23,13 @@
 
 //We defined the web service functions to install.
 $functions = array(
+    'local_rocketchat_set_rocketchat_event_based_sync' => array(
+        'classname'   => 'local_rocketchat_external',
+        'methodname'  => 'set_rocketchat_event_based_sync',
+        'classpath'   => 'local/rocketchat/externallib.php',
+        'description' => 'Sets whether or not a course should integrate based on events with rocket chat.',
+        'type'        => 'update'
+        ),
     'local_rocketchat_set_rocketchat_course_sync' => array(
         'classname'   => 'local_rocketchat_external',
         'methodname'  => 'set_rocketchat_course_sync',
@@ -52,7 +59,8 @@ $services = array(
         'functions' => array (
             'local_rocketchat_set_rocketchat_course_sync',
             'local_rocketchat_set_rocketchat_role_sync',
-            'local_rocketchat_manually_trigger_sync'),
+            'local_rocketchat_manually_trigger_sync',
+            'local_rocketchat_set_rocketchat_event_based_sync'),
         'restrictedusers' => 0,
         'enabled'=>1
         )

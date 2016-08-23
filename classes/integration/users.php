@@ -35,6 +35,11 @@ class users
         $this->_update_user_activity($userid, false);
     }
 
+    public function get_user($user) {
+        $rocketchatuser = $this->_get_user($user->id);
+        return $rocketchatuser;
+    }
+
     private function _user_exists($user) {
         foreach ($this->_existing_users() as $existinguser) {
             $username = $user->username;
@@ -51,8 +56,6 @@ class users
     }
 
     private function _existing_users() {
-        global $CFG;
-
         $url = $this->client->host . '/api/v2/users';
 
         $request = new \curl();        
@@ -66,7 +69,7 @@ class users
         return $response->users;
     }
 
-    private function _get_user($userid) {
+    public function _get_user($userid) {
         global $DB;
 
         $user = $DB->get_record('user', array("id" => $userid));
@@ -78,25 +81,22 @@ class users
         }
         
         $url = $this->client->host . '/api/v2/users?filter[username]=' . $username;
+        
         $request = new \curl();        
-
         $request->setHeader($this->client->authentication_headers());
-
+        
         $response = $request->get($url);
         $response = json_decode($response);        
-
+        
         $rocketchatuser = null;
 
         if($response->users) {
             $rocketchatuser = $response->users[0];
         }
-
         return $rocketchatuser;
     }
 
     private function _create_user($user) {
-        global $CFG;
-
         $url = $this->client->host . "/api/v2/users";
 
         $data = array(
@@ -111,10 +111,9 @@ class users
             "role" => 'user');
 
         $request = new \curl();        
-
         $request->setHeader($this->client->authentication_headers());
         $request->setHeader(array('Content-Type: application/json'));
-
+        
         $response = $request->post($url, json_encode($data));
         $response = json_decode($response);        
 
@@ -133,8 +132,8 @@ class users
         if($rocketchatuser) {
             $url = $this->client->host . "/api/v2/users/" . $rocketchatuser->_id;
             $data = array("active" => $isactive);
-            $request = new \curl();        
 
+            $request = new \curl();        
             $request->setHeader($this->client->authentication_headers());
             $request->setHeader(array('Content-Type: application/json'));
 

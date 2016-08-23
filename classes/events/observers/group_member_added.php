@@ -2,12 +2,12 @@
 
 namespace local_rocketchat\events\observers;
 
-class user_enrolment_updated {
+class group_member_added {
     public static function call($event) {
         $data = \local_rocketchat\utilities::access_protected($event, 'data');
 
         if(self::_is_event_based_sync($data['courseid'])) {
-            self::_sync_enrolment_status($data['objectid']); 
+            self::_add_subscription($data);
         }        
     } 
 
@@ -18,22 +18,18 @@ class user_enrolment_updated {
         return $rocketchatcourse->eventbasedsync;
     }
 
-    private static function _sync_enrolment_status($userenrolmentid) {
+    private static function _add_subscription($data) {
         global $DB;
+
+        $course = $DB->get_record('course', array('id'=>$data['courseid']));
+        $group = $DB->get_record('groups', array('id'=>$data['objectid']));
+        $user = $DB->get_record('user', array('id'=>$data['relateduserid']));
 
         $client = new \local_rocketchat\client();
 
         if($client->authenticated) {        
-            $userenrolment = $DB->get_record('user_enrolments', array("id" => $userenrolmentid));
-
-            $userapi = new \local_rocketchat\integration\users($client);
-
-            if($userenrolment->status == "1") {
-                $userapi->activate_user($userenrolment->userid);
-            } 
-            else {
-                $userapi->deactivate_user($userenrolment->userid);
-            }
+            $subscriptionapi = new \local_rocketchat\integration\subscriptions($client);
+            $subscriptionapi->add_subscription_for_user($user, $group); 
         }
     }
 }

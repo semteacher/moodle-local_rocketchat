@@ -23,12 +23,11 @@ echo html_writer::tag('p', 'Manage integration between Moodle and Rocket.Chat. S
 
 $courses = get_courses();
 
-echo html_writer::tag('h3', 'Integrated courses');
-
 echo html_writer::start_tag('table', array('class' => 'admintable generaltable', 'id'=>'integrated-courses'));
 
 echo html_writer::start_tag('thead');
 echo html_writer::tag('th', 'Course');
+echo html_writer::tag('th', 'Event Based Sync');
 echo html_writer::tag('th', 'Pending Sync');
 echo html_writer::tag('th', 'Last Sync Date');
 echo html_writer::end_tag('thead');
@@ -45,6 +44,10 @@ foreach ($courses as $course) {
             echo html_writer::start_tag('td');
             $courseurl =  new moodle_url($CFG->wwwroot . '/course/view.php', array('id'=>$course->id));
             echo html_writer::tag('a', $course->fullname, array('href' => $courseurl));
+            echo html_writer::end_tag('td');
+
+            echo html_writer::start_tag('td');
+            echo html_writer::checkbox('eventbasedsync', null, $rocketchatcourse->eventbasedsync, '', array('data-courseid'=> $course->id));
             echo html_writer::end_tag('td');
 
             echo html_writer::start_tag('td');
@@ -84,7 +87,10 @@ foreach ($courses as $course) {
 echo html_writer::end_tag('tbody');
 
 echo html_writer::end_tag('table');
-echo html_writer::tag('p', '* Courses pending sync will be sync\'d to rocket chat via the cron in the background</p>', array("class", "form-description"));
+echo html_writer::tag('p', '* Courses with event based sync active will be affected by certain events - group_member_added, group_member_removed and user_enrolment_updated. Ensure that you have done an initial sync before turning it on.',  array('class' => 'form-description'));
+echo html_writer::tag('p', '* Courses pending sync will be sync\'d to rocketchat on the next cron execution in the background. Pending sync will be removed after syncing.</p>', array("class", "form-description"));
+echo html_writer::tag('p', '* Hovering on the three dots will display any errors.</p>', array("class", "form-description"));
 echo html_writer::tag('p', '* Manual execution will be run immediately',  array('class' => 'form-description'));
+
 
 echo $OUTPUT->footer();

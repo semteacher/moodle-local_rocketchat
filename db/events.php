@@ -24,5 +24,13 @@ $observers = array(
     array(
         'eventname'   => '\core\event\user_enrolment_updated',
         'callback'    => '\local_rocketchat\events\observers\user_enrolment_updated::call'
+        ),
+    array(
+        'eventname'   => '\core\event\group_member_added',
+        'callback'    => '\local_rocketchat\events\observers\group_member_added::call'
+        ),
+    array(
+        'eventname'   => '\core\event\group_member_removed',
+        'callback'    => '\local_rocketchat\events\observers\group_member_removed::call'
         )
     );

@@ -113,6 +113,49 @@ class local_rocketchat_external extends external_api {
     /**
     * Returns description of method parameters
     * @return external_function_parameters
+    */
+    public static function set_rocketchat_event_based_sync_parameters() {
+        return new external_function_parameters(
+            array('courseid' => new external_value(PARAM_TEXT, 'The course id', VALUE_DEFAULT, NULL),
+                'eventbasedsync' => new external_value(PARAM_BOOL, 'Highlights if a course has event based sync active', VALUE_DEFAULT, false))
+            );
+    }
+
+    /**
+    * Returns description of method result value
+    * @return external_description
+    */
+    public static function set_rocketchat_event_based_sync($courseid, $eventbasedsync) {
+        $params = self::validate_parameters(self::set_rocketchat_event_based_sync_parameters(),
+            array('courseid' => $courseid, 'eventbasedsync' => $eventbasedsync)
+            );
+
+        \local_rocketchat\utilities::set_rocketchat_event_based_sync($courseid, $eventbasedsync);
+
+        return "The courseid is - {$courseid}  / The eventbasedsync {$eventbasedsync}";
+    }
+
+    /**
+    * Returns description of method result value
+    * @return external_description
+    */
+    public static function set_rocketchat_event_based_sync_returns() {
+        return new external_value(PARAM_TEXT, 'Whether or not the update was successful or not');
+    }
+
+    /**
+    * Can this function be called directly from ajax?
+    *
+    * @return boolean
+    * @since Moodle 2.9
+    */
+    public static function set_rocketchat_event_based_sync_is_allowed_from_ajax() {
+        return true;
+    }
+
+    /**
+    * Returns description of method parameters
+    * @return external_function_parameters
     */    
     public static function manually_trigger_sync_parameters() {
         return new external_function_parameters(array('courseid' => new external_value(PARAM_TEXT, 'The course id', VALUE_DEFAULT, NULL)));
