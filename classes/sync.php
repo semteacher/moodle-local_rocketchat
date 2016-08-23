@@ -35,23 +35,6 @@ class sync
         $this->_record_result($rocketchatcourse);
     }
 
-    public function sync_enrolment_status($userenrolmentid) {
-        global $DB;
-
-        if($this->client->authenticated) {        
-            $userenrolment = $DB->get_record('user_enrolments', array("id" => $userenrolmentid));
-
-            $userapi = new \local_rocketchat\integration\users($this->client);
-
-            if($userenrolment->status == "1") {
-                $userapi->activate_user($userenrolment->userid);
-            } 
-            else {
-                $userapi->deactivate_user($userenrolment->userid);
-            }
-        }
-    }
-
     private function create_rocketchat_course($courseid) {
         global $DB;
 
@@ -64,6 +47,10 @@ class sync
     }
     
     private function _run_sync($rocketchatcourse) {
+        global $DB;
+        
+        $course = $DB->get_record('course', array("id" => $rocketchatcourse->course));
+  
         if($this->client->authenticated) {
             $channelapi = new \local_rocketchat\integration\channels($this->client);
             $channelapi->create($rocketchatcourse);
@@ -74,7 +61,7 @@ class sync
             $this->errors = array_merge($this->errors, $userapi->errors);
 
             $subscriptionapi = new \local_rocketchat\integration\subscriptions($this->client);
-            $subscriptionapi->create($rocketchatcourse);
+            $subscriptionapi->add_subscriptions_for_course($course);
             $this->errors = array_merge($this->errors, $subscriptionapi->errors);
         } 
         else {

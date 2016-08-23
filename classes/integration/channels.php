@@ -16,7 +16,7 @@ class channels
     }
 
     public function create($rocketchatcourse) {
-        global $CFG, $DB;
+        global $DB;
 
         $course = $DB->get_record('course', array("id" => $rocketchatcourse->course));
         $groups = $DB->get_records('groups', array("courseid" => $rocketchatcourse->course));
@@ -29,11 +29,20 @@ class channels
         }
     }
 
+    public function get_channel_for_group($group) {
+        global $DB;
+
+        $course = $DB->get_record('course', array("id" => $group->courseid));
+        $channelname = $course->shortname . "-" . str_replace(" ", "_", $group->name);
+        $rocketchatchannel = $this->get_channel($channelname);
+        
+        return $rocketchatchannel;
+    }
+
     public function get_channel($name) {
         $url = $this->client->host . '/api/v2/rooms?filter[name]=' . $name;
 
         $request = new \curl();        
-
         $request->setHeader($this->client->authentication_headers());
 
         $response = $request->get($url);
@@ -61,8 +70,6 @@ class channels
     }
 
     private function _existing_channels() {
-        global $CFG;
-
         $url = $this->client->host . '/api/v2/rooms/private';
 
         $request = new \curl();        
@@ -77,8 +84,6 @@ class channels
     }
 
     private function _create_channel($channel) {
-        global $CFG;
-
         $url = $this->client->host . "/api/v2/rooms";
         $data = array("name"=>$channel, "type"=>"p");
 
@@ -100,11 +105,8 @@ class channels
     }
 
     private function _group_requires_rocketchat_channel($group) {
-        global $CFG;
-
         $groupregextext = get_config('local_rocketchat', 'groupregex');
         $groupregexs = explode("\r\n", $groupregextext);
-
 
         foreach ($groupregexs as $regex) {
             if (preg_match($regex, $group->name, $match)) {
