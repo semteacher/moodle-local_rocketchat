@@ -57,7 +57,7 @@ class sync
             $this->errors = array_merge($this->errors, $channelapi->errors);
 
             $userapi = new \local_rocketchat\integration\users($this->client);
-            $userapi->create($rocketchatcourse);
+            $userapi->create_users_for_course($rocketchatcourse);
             $this->errors = array_merge($this->errors, $userapi->errors);
 
             $subscriptionapi = new \local_rocketchat\integration\subscriptions($this->client);
