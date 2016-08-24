@@ -39,10 +39,11 @@ class subscriptions
 
     public function add_subscription_for_user($user, $group) {
         $rocketchatchannel = $this->channelapi->get_channel_for_group($group);
+        $rocketchatuser = $this->userapi->get_user($user);
 
         $subscription = $this->get_subscription($user, $group);
 
-        if(!$subscription && $rocketchatchannel) {
+        if($rocketchatuser && !$subscription && $rocketchatchannel) {
             $url = $this->client->host . "/api/v2/subscriptions";
             $data = array("username" => explode('@',$user->email)[0], 
                 "rid" => $rocketchatchannel->_id);

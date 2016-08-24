@@ -15,15 +15,45 @@ class users
         $this->client = $client;
     }
 
-    public function create($rocketchatcourse) {
+    public function create_users_for_course($rocketchatcourse) {
         $users =  \core_enrol_external::get_enrolled_users($rocketchatcourse->course);
         $users = json_decode(json_encode($users), FALSE );
 
         foreach ($users as $user) {
-            if(!$this->_user_exists($user))
+            if(!$this->user_exists($user))
             {
-                $this->_create_user($user);
+                $this->create_user($user);
             } 
+        }
+    }
+
+    public function create_user($user) {
+        $url = $this->client->host . "/api/v2/users";
+
+        $data = array(
+            "name" => $user->firstname . " " . $user->lastname,
+            "username" => explode('@',$user->email)[0],
+            "email" => $user->email,
+            "verified" => true,
+            "password" => substr(str_shuffle(MD5(microtime())), 0, 6),
+            "requirePasswordChange" => true,
+            "joinDefaultChannels" => false,
+            "sendWelcomeEmail" => true,
+            "role" => 'user');
+
+        $request = new \curl();        
+        $request->setHeader($this->client->authentication_headers());
+        $request->setHeader(array('Content-Type: application/json'));
+        
+        $response = $request->post($url, json_encode($data));
+        $response = json_decode($response);        
+
+        if(!$response->success) {
+            $object = new \stdClass();
+            $object->code = 'Rocket.Chat Integration - user creation';
+            $object->error = "[ user_id - " . $user->id . " | email - " . $user->email . "]" . $response->error;
+
+            array_push($this->errors, $object);
         }
     }
 
@@ -40,7 +70,7 @@ class users
         return $rocketchatuser;
     }
 
-    private function _user_exists($user) {
+    public function user_exists($user) {
         foreach ($this->_existing_users() as $existinguser) {
             $username = $user->username;
             if(count(explode('@',$user->email)) > 1) {
@@ -96,35 +126,7 @@ class users
         return $rocketchatuser;
     }
 
-    private function _create_user($user) {
-        $url = $this->client->host . "/api/v2/users";
-
-        $data = array(
-            "name" => $user->firstname . " " . $user->lastname,
-            "username" => explode('@',$user->email)[0],
-            "email" => $user->email,
-            "verified" => true,
-            "password" => substr(str_shuffle(MD5(microtime())), 0, 6),
-            "requirePasswordChange" => true,
-            "joinDefaultChannels" => false,
-            "sendWelcomeEmail" => true,
-            "role" => 'user');
-
-        $request = new \curl();        
-        $request->setHeader($this->client->authentication_headers());
-        $request->setHeader(array('Content-Type: application/json'));
-        
-        $response = $request->post($url, json_encode($data));
-        $response = json_decode($response);        
-
-        if(!$response->success) {
-            $object = new \stdClass();
-            $object->code = 'Rocket.Chat Integration - user creation';
-            $object->error = "[ user_id - " . $user->id . " | email - " . $user->email . "]" . $response->error;
-
-            array_push($this->errors, $object);
-        }
-    }
+    
 
     private function _update_user_activity($userid, $isactive) {
         $rocketchatuser = $this->_get_user($userid);
