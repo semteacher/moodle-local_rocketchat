@@ -15,7 +15,7 @@ class user_enrolment_updated {
         global $DB;
 
         $rocketchatcourse = $DB->get_record('local_rocketchat_courses', array('course'=>$courseid));
-        return $rocketchatcourse->eventbasedsync;
+        return $rocketchatcourse ? $rocketchatcourse->eventbasedsync : false;
     }
 
     private static function _sync_enrolment_status($userenrolmentid) {
