@@ -5,8 +5,8 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
         <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="eventbasedsync" TYPE="int" LENGTH="10" NOTNULL="true" default="0" SEQUENCE="false"/>
-        <FIELD NAME="pendingsync" TYPE="int" LENGTH="10" NOTNULL="true" default="0" SEQUENCE="false"/>
+        <FIELD NAME="eventbasedsync" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="pendingsync" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="lastsync" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="error" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
       </FIELDS>
@@ -21,7 +21,7 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
         <FIELD NAME="role" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="requiresync" TYPE="int" LENGTH="10" NOTNULL="true" default="0" SEQUENCE="false"/>
+        <FIELD NAME="requiresync" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" />
