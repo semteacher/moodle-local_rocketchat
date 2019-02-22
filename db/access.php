@@ -15,12 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
-* Rocket.chat
-*
-* @package    local_rocketchat
-* @copyright  2016 GetSmarter {@link http://www.getsmarter.co.za}
-* @license    MIT License
-*/
+ * Capability definitions for Rocket.Chat
+ *
+ * @package     local_rocketchat
+ * @copyright   2016 GetSmarter {@link http://www.getsmarter.co.za}
+ * @author      2019 Adrian Perez <p.adrian@gmx.ch> {@link https://adrianperez.me}
+ * @license     MIT License
+ */
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -28,13 +29,17 @@ $capabilities = array(
     'local/rocketchat:view' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array('manager' => CAP_ALLOW)            
-        ),
+        'archetypes' => array(
+            'manager' => CAP_ALLOW
+        )
+    ),
 
     'local/rocketchat:manage' => array(
         'riskbitmask' => RISK_CONFIG,
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array('manager' => CAP_ALLOW)
-        ),
-    );
+        'archetypes' => array(
+            'manager' => CAP_ALLOW
+        )
+    ),
+);
