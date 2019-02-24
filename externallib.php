@@ -54,6 +54,7 @@ class local_rocketchat_external extends external_api {
      * @return string
      * @throws coding_exception
      * @throws invalid_parameter_exception
+     * @throws dml_exception
      */
     public static function set_rocketchat_course_sync($courseid, $pendingsync) {
         $params = self::validate_parameters(self::set_rocketchat_course_sync_parameters(),
@@ -110,6 +111,7 @@ class local_rocketchat_external extends external_api {
      * @return external_description
      * @throws coding_exception
      * @throws invalid_parameter_exception
+     * @throws dml_exception
      */
     public static function set_rocketchat_role_sync($roleid, $requiresync) {
         $params = self::validate_parameters(self::set_rocketchat_role_sync_parameters(),
@@ -166,6 +168,7 @@ class local_rocketchat_external extends external_api {
      * @return external_description
      * @throws coding_exception
      * @throws invalid_parameter_exception
+     * @throws dml_exception
      */
     public static function set_rocketchat_event_based_sync($courseid, $eventbasedsync) {
         $params = self::validate_parameters(self::set_rocketchat_event_based_sync_parameters(),
@@ -219,13 +222,15 @@ class local_rocketchat_external extends external_api {
      * @return external_description
      * @throws coding_exception
      * @throws invalid_parameter_exception
+     * @throws dml_exception
      */
     public static function manually_trigger_sync($courseid) {
         $params = self::validate_parameters(self::manually_trigger_sync_parameters(),
             array('courseid' => $courseid)
         );
 
-        \local_rocketchat\sync::sync_pending_course($courseid);
+        $sync = new local_rocketchat\sync;
+        $sync->sync_pending_course($courseid);
 
         return new external_value(PARAM_TEXT, get_string('coursetriggeryncresult', 'local_rocketchat', $params));
     }

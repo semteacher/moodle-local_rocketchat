@@ -35,6 +35,8 @@ $string['coursesyncparam_pendingsync'] = 'Highlights if a course is pending sync
 $string['coursesyncparam_requiresync'] = 'Highlights if a course is requiring sync';
 $string['coursesyncparam_enentbasedsync'] = 'Highlights if a course has event based sync active';
 $string['sync_returns'] = 'Whether or not the update was successful or not';
+$string['auth_failure'] = 'Rocket.Chat Integration - authentication failure';
+$string['connection_failure'] = 'Failed to establish a client connection with the Rocket.Chat server';
 
 // Settings page.
 $string['heading_api'] = 'API Connection';
