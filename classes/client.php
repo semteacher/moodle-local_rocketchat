@@ -34,12 +34,12 @@ class client {
     public $authenticated = false;
     public $host;
     public $port;
+    public $url;
 
     private $authtoken;
     private $userid;
     private $username;
     private $password;
-    private $url;
     private $api;
 
     /**
@@ -63,6 +63,9 @@ class client {
         return array("X-Auth-Token: " . $this->authtoken, "X-User-Id: " . $this->userid);
     }
 
+    /**
+     * @throws \dml_exception
+     */
     private function authenticate() {
         $response = $this->request_login_credentials();
 
@@ -72,12 +75,20 @@ class client {
         }
     }
 
+    /**
+     * @return bool|mixed
+     * @throws \dml_exception
+     */
     private function request_login_credentials() {
-        $data = "user=" . $this->username . "&" . "password=" . $this->password;
-        $api = '/api/login';
-        $header = 'content-type: application/x-www-form-urlencoded';
+        $api = '/api/v1/login';
+        $data = array(
+            "user" => $this->username,
+            "password" => $this->password
+        );
 
-        return utilities::make_request($this->url, $api, $data , $header);
+        $header = array('Content-Type: application/json');
+
+        return utilities::make_request($this->url, $api, 'post', $data, $header);
     }
 
     private function store_credentials($data) {

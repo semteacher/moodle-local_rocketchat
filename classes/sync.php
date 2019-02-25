@@ -42,8 +42,10 @@ class sync {
     }
 
     /**
-     * @throws \dml_exception
      * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \moodle_exception
      */
     public function sync_pending_courses() {
         global $DB;
@@ -57,8 +59,10 @@ class sync {
 
     /**
      * @param $courseid
-     * @throws \dml_exception
      * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \moodle_exception
      */
     public function sync_pending_course($courseid) {
         global $DB;
@@ -83,8 +87,8 @@ class sync {
         global $DB;
 
         $rocketchatcourse = new \stdClass();
-        $rocketchatcourse['course'] = $courseid;
-        $rocketchatcourse['pendingsync'] = true;
+        $rocketchatcourse->course = $courseid;
+        $rocketchatcourse->pendingsync = true;
         $rocketchatcourseid = $DB->insert_record('local_rocketchat_courses', $rocketchatcourse);
 
         return $rocketchatcourseid;
@@ -92,8 +96,10 @@ class sync {
 
     /**
      * @param $rocketchatcourse
-     * @throws \dml_exception
      * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \moodle_exception
      */
     private function _run_sync($rocketchatcourse) {
         global $DB;
@@ -102,7 +108,7 @@ class sync {
 
         if ($this->client->authenticated) {
             $channelapi = new integration\channels($this->client);
-            $channelapi->create($rocketchatcourse);
+            $channelapi->create_channels_for_course($rocketchatcourse);
             $this->errors = array_merge($this->errors, $channelapi->errors);
 
             $userapi = new integration\users($this->client);
@@ -113,7 +119,7 @@ class sync {
             $subscriptionapi->add_subscriptions_for_course($course);
             $this->errors = array_merge($this->errors, $subscriptionapi->errors);
         } else {
-            $object = new \stdClass();
+            $object = array();
             $object->code = get_string('auth_failure', 'local_rocketchat');
             $object->error = get_string('connection_failure', 'local_rocketchat');
             array_push($this->errors, $object);

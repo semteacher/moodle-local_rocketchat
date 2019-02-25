@@ -27,8 +27,14 @@ namespace local_rocketchat;
 
 defined('MOODLE_INTERNAL') || die;
 
-class utilities
-{
+class utilities {
+
+    private $client;
+
+    public function __construct($client) {
+        $this->client = $client;
+    }
+
     /**
      * @param $courseid
      * @param int $pendingsync
@@ -156,16 +162,41 @@ class utilities
     /**
      * @param $url
      * @param $api
-     * @param $data
-     * @param $header
+     * @param string $method
+     * @param null $data
+     * @param null $header
      * @return bool|mixed
+     * @throws \dml_exception
      */
-    public static function make_request($url, $api, $data, $header) {
+    public static function make_request($url, $api, $method, $data = null, $header = null) {
         $request = new \curl();
-        $request->setHeader($header);
-        $posturl = $url . $api;
 
-        $response = $request->post($posturl , $data);
+        if (!empty($header)) {
+            $request->setHeader($header);
+        }
+
+        $url = $url . $api;
+
+        if (isset($data)) {
+            $data = json_encode($data);
+        };
+
+        if ($method == 'post') {
+            if (isset($data)) {
+                $response = $request->post($url, $data);
+            } else {
+                $response = $request->post($url);
+            }
+        } else if ($method == 'get') {
+            if (isset($data)) {
+                $response = $request->get($url, $data);
+            } else {
+                $response = $request->get($url);
+            }
+        } else {
+            $response = $request->delete($url);
+        }
+
         $response = json_decode($response);
 
         return $response;

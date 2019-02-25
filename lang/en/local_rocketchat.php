@@ -37,6 +37,9 @@ $string['coursesyncparam_enentbasedsync'] = 'Highlights if a course has event ba
 $string['sync_returns'] = 'Whether or not the update was successful or not';
 $string['auth_failure'] = 'Rocket.Chat Integration - authentication failure';
 $string['connection_failure'] = 'Failed to establish a client connection with the Rocket.Chat server';
+$string['user_creation'] = 'Rocket.Chat Integration - user creation';
+$string['channel_creation'] = 'Rocket.Chat Integration - channel creation';
+$string['subscription_creation'] = 'Rocket.Chat Integration - subscription creation';
 
 // Settings page.
 $string['heading_api'] = 'API Connection';
