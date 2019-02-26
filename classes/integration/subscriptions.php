@@ -124,7 +124,7 @@ class subscriptions {
 
         $subscription = $this->get_subscription($rocketchatchannel, $rocketchatuser);
 
-        if ($rocketchatuser && !$subscription && $rocketchatchannel) {
+        if ($rocketchatuser && $subscription && $rocketchatchannel) {
             $api = "/api/v1/groups.kick";
             $data = array(
                     "roomId" => $rocketchatchannel,
@@ -147,23 +147,19 @@ class subscriptions {
     }
 
     /**
-     * @param $user
-     * @param $group
+     * @param $rocketchatchannel
+     * @param $rocketchatuser
      * @return bool
      * @throws \dml_exception
      */
     public function get_subscription($rocketchatchannel, $rocketchatuser) {
 
         if ($rocketchatchannel && $rocketchatuser) {
-            $api = "/api/v1/groups.counters";
-            $data = array(
-                "roomId" => $rocketchatchannel,
-                "userId" => $rocketchatuser
-            );
+            $api = "/api/v1/groups.counters?roomId=" . $rocketchatchannel . "&userId=" . $rocketchatuser;
 
             $header = $this->client->authentication_headers();
 
-            $response = \local_rocketchat\utilities::make_request($this->client->url, $api, 'get', $data, $header);
+            $response = \local_rocketchat\utilities::make_request($this->client->url, $api, 'get', null, $header);
 
             if ($response->success) {
                 return $response->joined;
