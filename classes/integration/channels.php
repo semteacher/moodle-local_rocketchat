@@ -122,13 +122,14 @@ class channels {
      * @throws \dml_exception
      */
     private function _existing_channels() {
-        $api = '/api/v1/channels.list';
+        $api = '/api/v1/rooms.get';
 
         $header = $this->client->authentication_headers();
+        array_push($header, 'Content-Type: application/json');
 
         $response = \local_rocketchat\utilities::make_request($this->client->url, $api, 'get', null, $header);
 
-        return $response->rooms;
+        return $response->update;
     }
 
     /**
