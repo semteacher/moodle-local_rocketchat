@@ -85,10 +85,10 @@ class subscriptions {
      * @throws \coding_exception
      */
     public function add_subscription_for_user($user, $group) {
-        $rocketchatchannel = $this->channelapi->get_channel_for_group($group);
+        $rocketchatchannel = $this->channelapi->has_channel_for_group($group);
         $rocketchatuser = $this->userapi->get_user($user);
 
-        $subscription = $this->get_subscription($rocketchatchannel, $rocketchatuser);
+        $subscription = $this->has_subscription($rocketchatchannel, $rocketchatuser);
 
         if ($rocketchatuser && !$subscription && $rocketchatchannel) {
             $api = "/api/v1/groups.invite";
@@ -119,10 +119,10 @@ class subscriptions {
      * @throws \coding_exception
      */
     public function remove_subscription_for_user($user, $group) {
-        $rocketchatchannel = $this->channelapi->get_channel_for_group($group);
+        $rocketchatchannel = $this->channelapi->has_channel_for_group($group);
         $rocketchatuser = $this->userapi->get_user($user);
 
-        $subscription = $this->get_subscription($rocketchatchannel, $rocketchatuser);
+        $subscription = $this->has_subscription($rocketchatchannel, $rocketchatuser);
 
         if ($rocketchatuser && $subscription && $rocketchatchannel) {
             $api = "/api/v1/groups.kick";
@@ -152,7 +152,7 @@ class subscriptions {
      * @return bool
      * @throws \dml_exception
      */
-    public function get_subscription($rocketchatchannel, $rocketchatuser) {
+    public function has_subscription($rocketchatchannel, $rocketchatuser) {
 
         if ($rocketchatchannel && $rocketchatuser) {
             $api = "/api/v1/groups.counters?roomId=" . $rocketchatchannel . "&userId=" . $rocketchatuser;

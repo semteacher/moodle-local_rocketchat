@@ -25,6 +25,8 @@
 
 namespace local_rocketchat\integration;
 
+defined('MOODLE_INTERNAL') || die;
+
 require_once($CFG->libdir . '/filelib.php');
 require_once($CFG->dirroot . '/group/externallib.php');
 
@@ -62,12 +64,12 @@ class channels {
      * @return bool
      * @throws \dml_exception
      */
-    public function get_channel_for_group($group) {
+    public function has_channel_for_group($group) {
         global $DB;
 
         $course = $DB->get_record('course', array("id" => $group->courseid));
         $channelname = $course->shortname . "-" . str_replace(" ", "_", $group->name);
-        $rocketchatchannel = $this->get_private_group($channelname);
+        $rocketchatchannel = $this->has_private_group($channelname);
 
         return $rocketchatchannel;
     }
@@ -77,7 +79,7 @@ class channels {
      * @return bool
      * @throws \dml_exception
      */
-    public function get_private_group($name) {
+    public function has_private_group($name) {
         $api = '/api/v1/groups.info?roomName=' . $name;
 
         $header = $this->client->authentication_headers();
@@ -183,7 +185,7 @@ class channels {
         $groupregexs = explode("\r\n", $groupregextext);
 
         foreach ($groupregexs as $regex) {
-            if (preg_match($regex, $group->name, $match)) {
+            if (preg_match($regex, $group->name)) {
                 return true;
             }
         }

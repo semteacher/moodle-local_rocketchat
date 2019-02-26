@@ -109,7 +109,7 @@ class users
      * @throws \dml_exception
      */
     public function get_user($user) {
-        $rocketchatuser = $this->_get_user($user->id);
+        $rocketchatuser = $this->_has_user($user->id);
 
         return $rocketchatuser;
     }
@@ -154,7 +154,7 @@ class users
      * @return bool
      * @throws \dml_exception
      */
-    public function _get_user($userid) {
+    public function _has_user($userid) {
         global $DB;
 
         $user = $DB->get_record('user', array("id" => $userid));
@@ -183,7 +183,7 @@ class users
      * @throws \dml_exception
      */
     private function _update_user_activity($userid, $isactive) {
-        $rocketchatuser = $this->_get_user($userid);
+        $rocketchatuser = $this->_has_user($userid);
 
         if ($rocketchatuser) {
             $api = '/api/v1/users.update';

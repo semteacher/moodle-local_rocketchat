@@ -1,77 +1,54 @@
+/* eslint-env jquery */
 define(['core/ajax', 'local_rocketchat/rocketchat'], function(ajax) {
     var module = {};
 
     var set_rocketchat_course_sync = function(course_id, pendingsync) {
-        var promises = ajax.call([
-        { 
-            methodname: 'local_rocketchat_set_rocketchat_course_sync', 
-            args: { 
-                courseid: course_id, 
-                pendingsync: pendingsync 
-            } 
+        ajax.call([
+        {
+            methodname: 'local_rocketchat_set_rocketchat_course_sync',
+            args: {
+                courseid: course_id,
+                pendingsync: pendingsync
+            }
         }
         ]);
-
-        promises[0].done(function(response) {
-            console.log('Save successful');
-        }).fail(function(ex) {
-            console.log(ex);
-        });
     };
 
     var set_rocketchat_role_sync = function(role_id, requiresync) {
-        var promises = ajax.call([
-        { 
-            methodname: 'local_rocketchat_set_rocketchat_role_sync', 
-            args: { 
-                roleid: role_id, 
-                requiresync: requiresync 
-            } 
+        ajax.call([
+        {
+            methodname: 'local_rocketchat_set_rocketchat_role_sync',
+            args: {
+                roleid: role_id,
+                requiresync: requiresync
+            }
         }
         ]);
-
-        promises[0].done(function(response) {
-            console.log('Save successful');
-        }).fail(function(ex) {
-            console.log(ex);
-        });
     };
 
     var set_rocketchat_event_based_sync = function(course_id, eventbasedsync) {
-        var promises = ajax.call([
-        { 
-            methodname: 'local_rocketchat_set_rocketchat_event_based_sync', 
-            args: { 
-                courseid: course_id, 
-                eventbasedsync: eventbasedsync 
-            } 
+        ajax.call([
+        {
+            methodname: 'local_rocketchat_set_rocketchat_event_based_sync',
+            args: {
+                courseid: course_id,
+                eventbasedsync: eventbasedsync
+            }
+        }
+        ]);
+    };
+
+    var manually_trigger_sync = function(courseid) {
+        ajax.call([
+        {
+            methodname: 'local_rocketchat_manually_trigger_sync',
+            args: {
+                courseid: courseid
+            }
         }
         ]);
 
-        promises[0].done(function(response) {
-            console.log('Save successful');
-        }).fail(function(ex) {
-            console.log(ex);
-        });
-    };  
-
-    var manually_trigger_sync = function(courseid, sync_button) {
-        var promises = ajax.call([
-        { 
-            methodname: 'local_rocketchat_manually_trigger_sync', 
-            args: { 
-                courseid: courseid } 
-            }
-            ]);
-
-        promises[0].done(function(response) {
-            console.log('Save successful');
-            location.reload();
-        }).fail(function(ex) {
-            location.reload();
-            console.log('There was an error')
-            console.log(ex);
-        });
+        location.reload();
     };
 
     module.init = function() {
@@ -86,7 +63,7 @@ define(['core/ajax', 'local_rocketchat/rocketchat'], function(ajax) {
             $(this).prop("disabled", "disabled");
             var courseid = $(this).data('courseid');
             manually_trigger_sync(courseid, this);
-        });    
+        });
 
         $('#integrated-courses').on('click', 'input[name="pendingsync"]', function() {
             var checkbox = $(this);
@@ -97,7 +74,7 @@ define(['core/ajax', 'local_rocketchat/rocketchat'], function(ajax) {
             var checkbox = $(this);
             set_rocketchat_event_based_sync(checkbox.data('courseid'), checkbox.is(":checked"));
         });
-    }
+    };
 
     window.M.local_rocketchat = module;
 

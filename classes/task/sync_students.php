@@ -47,8 +47,6 @@ class sync_students extends \core\task\scheduled_task {
      * Run the sync task.
      */
     public function execute() {
-        global $DB;
-
         $this->currenttime = time();
 
         if ($this->get_last_run_time() > 0) {

@@ -73,7 +73,7 @@ $services = array(
             'local_rocketchat_set_rocketchat_role_sync',
             'local_rocketchat_manually_trigger_sync',
             'local_rocketchat_set_rocketchat_event_based_sync'),
-        'restrictedusers' => 0,
-        'enabled'=>1
+        'restrictedusers'   => 0,
+        'enabled'           => 1
         )
     );
