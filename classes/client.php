@@ -32,8 +32,6 @@ require_once($CFG->libdir . '/filelib.php');
 class client {
 
     public $authenticated = false;
-    public $host;
-    public $port;
     public $url;
 
     private $authtoken;
@@ -48,12 +46,15 @@ class client {
      * @throws \dml_exception
      */
     public function __construct() {
-        $this->host = get_config('local_rocketchat', 'host');
-        $this->port = get_config('local_rocketchat', 'port');
+        // TODO: Add method to get the instanceurl, to use it in the block_rocketchat.
+        $host = get_config('local_rocketchat', 'host');
+        $port = !empty($port = get_config('local_rocketchat', 'port')) ? ':' . $port : '';
+        $protocol = get_config('local_rocketchat', 'protocol') == 0 ? 'https' : 'http';
+
         $this->username = get_config('local_rocketchat', 'username');
         $this->password = get_config('local_rocketchat', 'password');
 
-        $this->url = $this->host . ':' . $this->port;
+        $this->url = $protocol . $host . $port;
         $this->api = '';
 
         $this->authenticate();
