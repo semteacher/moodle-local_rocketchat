@@ -46,18 +46,20 @@ class client {
      * @throws \dml_exception
      */
     public function __construct() {
-        // TODO: Add method to get the instanceurl, to use it in the block_rocketchat.
         $host = get_config('local_rocketchat', 'host');
         $port = !empty($port = get_config('local_rocketchat', 'port')) ? ':' . $port : '';
         $protocol = get_config('local_rocketchat', 'protocol') == 0 ? 'https' : 'http';
 
+        $this->url = $protocol . '://' . $host . $port;
         $this->username = get_config('local_rocketchat', 'username');
         $this->password = get_config('local_rocketchat', 'password');
-
-        $this->url = $protocol . $host . $port;
         $this->api = '';
 
         $this->authenticate();
+    }
+
+    public function get_instance_url() {
+        return $this->url;
     }
 
     public function authentication_headers() {

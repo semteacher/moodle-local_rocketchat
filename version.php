@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_rocketchat';    // Full name of the plugin (used for diagnostics).
-$plugin->version   = 2016082401;            // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2016082402;            // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2014041100;            // Requires this Moodle version.
 $plugin->maturity  = MATURITY_ALPHA;        // The current plugin maturity level.
 $plugin->release   = '1.0.1';               // The current plugin release.
