@@ -55,7 +55,7 @@ class client {
         $this->password = get_config('local_rocketchat', 'password');
         $this->api = '';
 
-        $this->authenticate();
+        $this->authenticate($this->username, $this->password);
     }
 
     public function get_instance_url() {
@@ -69,25 +69,30 @@ class client {
     /**
      * @throws \dml_exception
      */
-    private function authenticate() {
-        $response = $this->request_login_credentials();
+    public function authenticate($user, $password) {
+        $response = $this->request_login_credentials($user, $password);
 
         if ($response && $response->status == 'success') {
             $this->store_credentials($response->data);
             $this->authenticated = true;
         }
+
+        return $response;
     }
 
     /**
+     * Authenticate user on Rocket.Chat endpoint.
+     *
+     * @param $user
+     * @param $password
      * @return bool|mixed
-     * @throws \dml_exception
      */
-    private function request_login_credentials() {
+    private function request_login_credentials($user, $password) {
         $api = '/api/v1/login';
-        $data = array(
-            "user" => $this->username,
-            "password" => $this->password
-        );
+        $data = [
+            'user' => $user,
+            'password' => $password
+        ];
 
         $header = array('Content-Type: application/json');
 

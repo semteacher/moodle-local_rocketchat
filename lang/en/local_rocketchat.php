@@ -40,6 +40,11 @@ $string['connection_failure'] = 'Failed to establish a client connection with th
 $string['user_creation'] = 'Rocket.Chat Integration - user creation';
 $string['channel_creation'] = 'Rocket.Chat Integration - channel creation';
 $string['subscription_creation'] = 'Rocket.Chat Integration - subscription creation';
+$string['linkaccount'] = 'Rocket.Chat preferences';
+$string['linkaccount_unexpectedresult'] = 'There was a problem connecting to your Rocket.Chat account. Please check the credentials and try again.';
+$string['linkaccount_unexpectedmessage'] = '<br/><br/>The backpack returned the error: "{$a}"';
+$string['linkaccount_connected'] = 'Rocket.Chat account is connected';
+$string['linkaccount_disconnected'] = 'Rocket.Chat account is disconnected';
 
 // Settings page.
 $string['heading_api'] = 'API Connection';
@@ -54,6 +59,8 @@ $string['username'] = 'Username';
 $string['username_desc'] = 'Username for accessing the API. Please create a Rocket.Chat Moodle user for this purpose.';
 $string['password'] = 'Password';
 $string['password_desc'] = 'Specified password for the given user.';
+$string['allowexternalconnection'] = 'External connection';
+$string['allowexternalconnection_desc'] = 'If enabled, users can <a href="/local/rocketchat/linkaccount.php" target="_blank">connect</a> to the Rocket.Chat instance and store the retrieved token in Moodle. With this setting, your users must link only once the Rocket.Chat account.';
 $string['groupregex'] = 'Group Regex Filters';
 $string['groupregex_desc'] = 'Used for matching which groups should be sync to Rocket.Chat:<ul><li>/all/</li><li>/coach group [a-z][0-9]/</li><li>/example project group [0-9][0-9]/</li></ul>';
 

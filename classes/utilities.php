@@ -201,4 +201,17 @@ class utilities {
 
         return $response;
     }
+
+    /**
+     * Checks if users can link their Rocket.Chat account.
+     *
+     * @return bool
+     */
+    public static function is_external_connection_allowed(): bool {
+        if (get_config('local_rocketchat', 'allowexternalconnection')) {
+            return true;
+        }
+
+        return false;
+    }
 }

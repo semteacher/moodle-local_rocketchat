@@ -52,6 +52,9 @@ $settingspage->add(new admin_setting_configpasswordunmask('local_rocketchat/pass
         get_string('password' , 'local_rocketchat'),
         get_string('password_desc' , 'local_rocketchat'),
         ''));
+$settingspage->add(new admin_setting_configcheckbox('local_rocketchat/allowexternalconnection',
+        get_string('allowexternalconnection', 'local_rocketchat'),
+        get_string('allowexternalconnection_desc', 'local_rocketchat'), 1));
 
 $settingspage->add(new admin_setting_heading('local_rocketchat_settings_sync', get_string('heading_sync', 'local_rocketchat'), ''));
 $settingspage->add(new admin_setting_configtextarea('local_rocketchat/groupregex',
