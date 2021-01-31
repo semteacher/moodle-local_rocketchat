@@ -17,9 +17,9 @@
 /**
  * Defines various library functions.
  *
- * @package   local_rocketchat
- * @copyright 2021 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_rocketchat
+ * @copyright   2021 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
+ * @license     MIT License
  */
 
 defined('MOODLE_INTERNAL') || die();

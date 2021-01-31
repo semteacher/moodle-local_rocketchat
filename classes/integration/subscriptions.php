@@ -19,7 +19,7 @@
  *
  * @package     local_rocketchat
  * @copyright   2016 GetSmarter {@link http://www.getsmarter.co.za}
- * @author      2019 Adrian Perez <p.adrian@gmx.ch> {@link https://adrianperez.me}
+ * @author      2019 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
  * @license     MIT License
  */
 

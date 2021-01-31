@@ -19,7 +19,7 @@
  *
  * @package     local_rocketchat
  * @copyright   2016 GetSmarter {@link http://www.getsmarter.co.za}
- * @author      2019 Adrian Perez <p.adrian@gmx.ch> {@link https://adrianperez.me}
+ * @author      2019 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
  * @license     MIT License
  */
 
@@ -112,9 +112,9 @@ class utilities {
                 lrc.lastsync,
                 lrc.error
             FROM
-                mdl_course c
+                {course} c
 
-            LEFT JOIN mdl_local_rocketchat_courses lrc ON
+            LEFT JOIN {local_rocketchat_courses} lrc ON
                 lrc.course = c.id
         ';
 
@@ -135,9 +135,9 @@ class utilities {
                 r.id roleid,
                 CASE WHEN lrr.id IS NULL THEN 0 ELSE lrr.requiresync END requiresync
             FROM
-                mdl_role r
+                {role} r
 
-            LEFT JOIN mdl_local_rocketchat_roles lrr ON
+            LEFT JOIN {local_rocketchat_roles} lrr ON
                 lrr.role = r.id;
         ';
 

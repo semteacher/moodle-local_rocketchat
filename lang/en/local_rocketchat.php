@@ -19,7 +19,7 @@
  *
  * @package     local_rocketchat
  * @copyright   2016 GetSmarter {@link http://www.getsmarter.co.za}
- * @author      2019 Adrian Perez <p.adrian@gmx.ch> {@link https://adrianperez.me}
+ * @author      2019 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
  * @license     MIT License
  */
 
@@ -42,7 +42,7 @@ $string['channel_creation'] = 'Rocket.Chat Integration - channel creation';
 $string['subscription_creation'] = 'Rocket.Chat Integration - subscription creation';
 $string['linkaccount'] = 'Rocket.Chat preferences';
 $string['linkaccount_unexpectedresult'] = 'There was a problem connecting to your Rocket.Chat account. Please check the credentials and try again.';
-$string['linkaccount_unexpectedmessage'] = '<br/><br/>The backpack returned the error: "{$a}"';
+$string['linkaccount_unexpectedmessage'] = '<br/><br/>Rocket.Chat returned the error: "{$a}"';
 $string['linkaccount_connected'] = 'Rocket.Chat account is connected';
 $string['linkaccount_disconnected'] = 'Rocket.Chat account is disconnected';
 

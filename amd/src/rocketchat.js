@@ -1,82 +1,101 @@
-/* eslint-env jquery */
-define(['core/ajax', 'local_rocketchat/rocketchat'], function(ajax) {
-    var module = {};
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-    var set_rocketchat_course_sync = function(course_id, pendingsync) {
-        ajax.call([
+/**
+ * Javascript to initialise the Rocket.Chat courses- and role integration settings.
+ *
+ * @package     local_rocketchat
+ * @copyright   2016 GetSmarter {@link http://www.getsmarter.co.za}
+ * @author      2021 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
+ * @license     MIT License
+ */
+
+import $ from 'jquery';
+import Ajax from 'core/ajax';
+
+const setRocketChatCourseSync = (courseid, pendingsync) => {
+    Ajax.call([
         {
             methodname: 'local_rocketchat_set_rocketchat_course_sync',
             args: {
-                courseid: course_id,
+                courseid: courseid,
                 pendingsync: pendingsync
             }
         }
-        ]);
-    };
+    ]);
+};
 
-    var set_rocketchat_role_sync = function(role_id, requiresync) {
-        ajax.call([
-        {
-            methodname: 'local_rocketchat_set_rocketchat_role_sync',
-            args: {
-                roleid: role_id,
-                requiresync: requiresync
-            }
-        }
-        ]);
-    };
-
-    var set_rocketchat_event_based_sync = function(course_id, eventbasedsync) {
-        ajax.call([
+const setRocketChatEventBasedSync = (courseid, eventbasedsync) => {
+    Ajax.call([
         {
             methodname: 'local_rocketchat_set_rocketchat_event_based_sync',
             args: {
-                courseid: course_id,
+                courseid: courseid,
                 eventbasedsync: eventbasedsync
             }
         }
-        ]);
-    };
+    ]);
+};
 
-    var manually_trigger_sync = function(courseid) {
-        ajax.call([
+const setRocketChatManuallyTriggerSync = (courseid) => {
+    Ajax.call([
         {
             methodname: 'local_rocketchat_manually_trigger_sync',
             args: {
                 courseid: courseid
             }
         }
-        ]);
+    ]);
 
-        location.reload();
-    };
+    location.reload();
+};
 
-    module.init = function() {
-        $('#integrated-roles').on('click', 'input', function() {
-            var checkbox = $(this);
-            set_rocketchat_role_sync(checkbox.data('roleid'), checkbox.is(":checked"));
-        });
+const setRocketChatRoleSync = (roleid, requiresync) => {
+    Ajax.call([
+        {
+            methodname: 'local_rocketchat_set_rocketchat_role_sync',
+            args: {
+                roleid: roleid,
+                requiresync: requiresync
+            }
+        }
+    ]);
+};
 
-        $('#integrated-courses').on('click', 'button', function(e) {
-            e.preventDefault();
-            $(this).text("Syncing ...");
-            $(this).prop("disabled", "disabled");
-            var courseid = $(this).data('courseid');
-            manually_trigger_sync(courseid, this);
-        });
+export const init = () => {
+    const courses = $('#integrated-courses');
+    const roles = $('#integrated-roles');
 
-        $('#integrated-courses').on('click', 'input[name="pendingsync"]', function() {
-            var checkbox = $(this);
-            set_rocketchat_course_sync(checkbox.data('courseid'), checkbox.is(":checked"));
-        });
+    courses.on('click', 'input[name="pendingsync"]', function () {
+        setRocketChatCourseSync($(this).data('courseid'), $(this).is(":checked"));
+    });
 
-        $('#integrated-courses').on('click', 'input[name="eventbasedsync"]', function() {
-            var checkbox = $(this);
-            set_rocketchat_event_based_sync(checkbox.data('courseid'), checkbox.is(":checked"));
-        });
-    };
+    courses.on('click', 'input[name="eventbasedsync"]', function () {
+        setRocketChatEventBasedSync($(this).data('courseid'), $(this).is(":checked"));
+    });
 
-    window.M.local_rocketchat = module;
+    courses.on('click', 'button', function (e) {
+        e.preventDefault();
 
-    return module;
-});
+        $(this).text("Syncing ...");
+        $(this).prop("disabled", "disabled");
+
+        setRocketChatManuallyTriggerSync($(this).data('courseid'), this);
+    });
+
+    roles.on('click', 'input', function () {
+        setRocketChatRoleSync($(this).data('roleid'), $(this).is(":checked"));
+    });
+};

@@ -36,8 +36,8 @@
  *
  * @package     local_rocketchat
  * @copyright   2016 GetSmarter {@link http://www.getsmarter.co.za}
- * @author      2019 Adrian Perez <p.adrian@gmx.ch> {@link https://adrianperez.me}
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author      2019 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
+ * @license     MIT License
  */
 
 defined('MOODLE_INTERNAL') || die;

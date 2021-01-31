@@ -15,13 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * User backpack settings page.
+ * Rocket.Chat user preference.
  *
- * @package    core
- * @subpackage badges
- * @copyright  2012 onwards Totara Learning Solutions Ltd {@link http://www.totaralms.com/}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author     Yuliya Bozhko <yuliya.bozhko@totaralms.com>
+ * @package     local_rocketchat
+ * @copyright   2021 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
+ * @license     MIT License
  */
 
 require_once(__DIR__ . '/../../config.php');
