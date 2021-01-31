@@ -78,15 +78,15 @@ export const init = () => {
     const courses = $('#integrated-courses');
     const roles = $('#integrated-roles');
 
-    courses.on('click', 'input[name="pendingsync"]', function () {
+    courses.on('click', 'input[name="pendingsync"]', function() {
         setRocketChatCourseSync($(this).data('courseid'), $(this).is(":checked"));
     });
 
-    courses.on('click', 'input[name="eventbasedsync"]', function () {
+    courses.on('click', 'input[name="eventbasedsync"]', function() {
         setRocketChatEventBasedSync($(this).data('courseid'), $(this).is(":checked"));
     });
 
-    courses.on('click', 'button', function (e) {
+    courses.on('click', 'button', function(e) {
         e.preventDefault();
 
         $(this).text("Syncing ...");
@@ -95,7 +95,7 @@ export const init = () => {
         setRocketChatManuallyTriggerSync($(this).data('courseid'), this);
     });
 
-    roles.on('click', 'input', function () {
+    roles.on('click', 'input', function() {
         setRocketChatRoleSync($(this).data('roleid'), $(this).is(":checked"));
     });
 };

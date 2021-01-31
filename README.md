@@ -1,4 +1,4 @@
-# Moodle Rocket.Chat Sync Plugin [![Build Status](https://travis-ci.org/adpe/moodle-local_rocketchat.svg?branch=master)](https://travis-ci.org/adpe/moodle-local_rocketchat)
+# Moodle Rocket.Chat Sync Plugin ![Moodle Plugin CI](https://github.com/adpe/moodle-local_rocketchat/workflows/Moodle%20Plugin%20CI/badge.svg)
 
 The Rocket.Chat plugin is an integration between Moodle that allows users to push students from Moodle into channels on Rocket.Chat. These channels correspond to their groups in Moodle.
 
