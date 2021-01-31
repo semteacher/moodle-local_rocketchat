@@ -46,6 +46,11 @@ $string['linkaccount_unexpectedmessage'] = '<br/><br/>The backpack returned the 
 $string['linkaccount_connected'] = 'Rocket.Chat account is connected';
 $string['linkaccount_disconnected'] = 'Rocket.Chat account is disconnected';
 
+// Capabilities.
+$string['rocketchat:view'] = 'Manage Rocket.Chat course- and role integration global settings';
+$string['rocketchat:manage'] = 'Manage Rocket.chat global settings';
+$string['rocketchat:linkaccount'] = 'Manage own linked Rocket.Chat account';
+
 // Settings page.
 $string['heading_api'] = 'API Connection';
 $string['heading_sync'] = 'Sync Configuration';
