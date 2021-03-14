@@ -51,6 +51,10 @@ $string['rocketchat:view'] = 'Manage Rocket.Chat course- and role integration gl
 $string['rocketchat:manage'] = 'Manage Rocket.chat global settings';
 $string['rocketchat:linkaccount'] = 'Manage own linked Rocket.Chat account';
 
+// Privacy.
+$string['privacy:metadata:preference:local_rocketchat_external_user'] = 'The email associated with the Rocket.Chat account.';
+$string['privacy:metadata:preference:local_rocketchat_external_token'] = 'The external token returned from linking the Rocket.Chat account.';
+
 // Settings page.
 $string['heading_api'] = 'API Connection';
 $string['heading_sync'] = 'Sync Configuration';
