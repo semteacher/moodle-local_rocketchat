@@ -38,21 +38,9 @@ class user_enrolment_created {
     public static function call($event) {
         $data = \local_rocketchat\utilities::access_protected($event, 'data');
 
-        if (self::_is_event_based_sync($data['courseid'])) {
-            self::_sync_user($data['relateduserid']);
+        if (\local_rocketchat\sync::is_event_based_sync_on_course($data['courseid'])) {
+            self::sync_user($data['relateduserid']);
         }
-    }
-
-    /**
-     * @param $courseid
-     * @return bool
-     * @throws \dml_exception
-     */
-    private static function _is_event_based_sync($courseid) {
-        global $DB;
-
-        $rocketchatcourse = $DB->get_record('local_rocketchat_courses', array('course' => $courseid));
-        return $rocketchatcourse ? $rocketchatcourse->eventbasedsync : false;
     }
 
     /**
@@ -60,19 +48,21 @@ class user_enrolment_created {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    private static function _sync_user($userid) {
+    private static function sync_user($userid) {
         global $DB;
 
         $client = new \local_rocketchat\client();
-
-        if ($client->authenticated) {
-            $user = $DB->get_record('user', array("id" => $userid));
-
-            $userapi = new \local_rocketchat\integration\users($client);
-
-            if (!$userapi->user_exists($user)) {
-                $userapi->create_user($user);
-            }
+        if (!$client->authenticated) {
+            return;
         }
+
+        $user = $DB->get_record('user', ['id' => $userid]);
+
+        $userapi = new \local_rocketchat\integration\users($client);
+        if ($userapi->user_exists($user)) {
+            return;
+        }
+
+        $userapi->create_user($user);
     }
 }

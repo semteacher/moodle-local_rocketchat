@@ -37,42 +37,31 @@ class user_enrolment_updated {
     public static function call($event) {
         $data = \local_rocketchat\utilities::access_protected($event, 'data');
 
-        if (self::_is_event_based_sync($data['courseid'])) {
-            self::_sync_enrolment_status($data['objectid']);
+        if (\local_rocketchat\sync::is_event_based_sync_on_course($data['courseid'])) {
+            self::sync_enrolment_status($data['objectid']);
         }
-    }
-
-    /**
-     * @param $courseid
-     * @return bool
-     * @throws \dml_exception
-     */
-    private static function _is_event_based_sync($courseid) {
-        global $DB;
-
-        $rocketchatcourse = $DB->get_record('local_rocketchat_courses', array('course' => $courseid));
-        return $rocketchatcourse ? $rocketchatcourse->eventbasedsync : false;
     }
 
     /**
      * @param $userenrolmentid
      * @throws \dml_exception
      */
-    private static function _sync_enrolment_status($userenrolmentid) {
+    private static function sync_enrolment_status($userenrolmentid) {
         global $DB;
 
         $client = new \local_rocketchat\client();
-
-        if ($client->authenticated) {
-            $userenrolment = $DB->get_record('user_enrolments', array("id" => $userenrolmentid));
-
-            $userapi = new \local_rocketchat\integration\users($client);
-
-            if ($userenrolment->status == "1") {
-                $userapi->activate_user($userenrolment->userid);
-            } else {
-                $userapi->deactivate_user($userenrolment->userid);
-            }
+        if (!$client->authenticated) {
+            return;
         }
+
+        $userapi = new \local_rocketchat\integration\users($client);
+        $userenrolment = $DB->get_record('user_enrolments', ['id' => $userenrolmentid]);
+
+        $isactive = false;
+        if ($userenrolment->status !== '1') {
+            $isactive = true;
+        }
+
+        $userapi->update_user_activity($userenrolment->userid, $isactive);
     }
 }

@@ -32,9 +32,8 @@ require_once($CFG->dirroot . '/group/externallib.php');
 
 class channels {
 
-    public $errors = array();
-
     private $client;
+    public $errors = [];
 
     public function __construct($client) {
         $this->client = $client;
@@ -48,14 +47,16 @@ class channels {
     public function create_channels_for_course($rocketchatcourse) {
         global $DB;
 
-        $course = $DB->get_record('course', array("id" => $rocketchatcourse->course));
-        $groups = $DB->get_records('groups', array("courseid" => $course->id));
+        $course = $DB->get_record('course', ['id' => $rocketchatcourse->course]);
+        $groups = $DB->get_records('groups', ['courseid' => $course->id]);
 
         foreach ($groups as $group) {
-            if ($this->_group_requires_rocketchat_channel($group)) {
-                $channelname = $course->shortname . "-" . str_replace(" ", "_", $group->name);
-                $this->_create($channelname);
+            if (!$this->group_requires_rocketchat_channel($group)) {
+                continue;
             }
+
+            $channelname = $this->get_formatted_channel_name($course->shortname, $group->name);
+            $this->create($channelname);
         }
     }
 
@@ -67,11 +68,10 @@ class channels {
     public function has_channel_for_group($group) {
         global $DB;
 
-        $course = $DB->get_record('course', array("id" => $group->courseid));
-        $channelname = $course->shortname . "-" . str_replace(" ", "_", $group->name);
-        $rocketchatchannel = $this->has_private_group($channelname);
+        $course = $DB->get_record('course', ['id' => $group->courseid]);
+        $channelname = $this->get_formatted_channel_name($course->shortname, $group->name);
 
-        return $rocketchatchannel;
+        return $this->has_private_group($channelname);
     }
 
     /**
@@ -98,9 +98,9 @@ class channels {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    private function _create($channel) {
-        if (!$this->_channel_exists($channel)) {
-            $this->_create_channel($channel);
+    private function create($channel) {
+        if (!$this->channel_exists($channel)) {
+            $this->create_channel($channel);
         }
     }
 
@@ -109,8 +109,8 @@ class channels {
      * @return bool
      * @throws \dml_exception
      */
-    private function _channel_exists($channelname) {
-        foreach ($this->_existing_channels() as $channel) {
+    private function channel_exists($channelname) {
+        foreach ($this->get_existing_channels() as $channel) {
             if ($channel->name == $channelname) {
                 return true;
             }
@@ -123,7 +123,7 @@ class channels {
      * @return mixed
      * @throws \dml_exception
      */
-    private function _existing_channels() {
+    private function get_existing_channels() {
         $api = '/api/v1/rooms.get';
 
         $header = $this->client->authentication_headers();
@@ -139,11 +139,11 @@ class channels {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    private function _create_channel($channel) {
+    private function create_channel($channel) {
         $api = '/api/v1/channels.create';
-        $data = array(
-            "name" => $channel
-        );
+        $data = [
+                'name' => $channel
+        ];
 
         $header = $this->client->authentication_headers();
         array_push($header, 'Content-Type: application/json');
@@ -156,22 +156,24 @@ class channels {
             $object->error = $response->error;
 
             array_push($this->errors, $object);
-        } else {
-            $api = '/api/v1/channels.setType';
-            $data = array(
-                    "roomId" => $response->channel->_id,
-                    "type" => 'p'
-            );
 
-            $response = \local_rocketchat\utilities::make_request($this->client->url, $api, 'post', $data, $header);
+            return;
+        }
 
-            if (!$response->success) {
-                $object = new \stdClass();
-                $object->code = get_string('channel_creation', 'local_rocketchat');
-                $object->error = $response->error;
+        $api = '/api/v1/channels.setType';
+        $data = [
+                'roomId' => $response->channel->_id,
+                'type' => 'p'
+        ];
 
-                array_push($this->errors, $object);
-            }
+        $response = \local_rocketchat\utilities::make_request($this->client->url, $api, 'post', $data, $header);
+
+        if (!$response->success) {
+            $object = new \stdClass();
+            $object->code = get_string('channel_creation', 'local_rocketchat');
+            $object->error = $response->error;
+
+            array_push($this->errors, $object);
         }
     }
 
@@ -180,7 +182,7 @@ class channels {
      * @return bool
      * @throws \dml_exception
      */
-    private function _group_requires_rocketchat_channel($group) {
+    private function group_requires_rocketchat_channel($group) {
         $groupregextext = get_config('local_rocketchat', 'groupregex');
         $groupregexs = explode("\r\n", $groupregextext);
 
@@ -191,5 +193,14 @@ class channels {
         }
 
         return false;
+    }
+
+    /**
+     * @param $courseshortname
+     * @param $groupname
+     * @return string
+     */
+    private function get_formatted_channel_name($courseshortname, $groupname): string {
+        return $courseshortname . '-' . str_replace(' ', '_', $groupname);
     }
 }

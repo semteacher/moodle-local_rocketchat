@@ -30,11 +30,10 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir . '/filelib.php');
 require_once($CFG->dirroot . '/enrol/externallib.php');
 
-class users
-{
-    public $errors = array();
+class users {
 
     private $client;
+    public $errors = [];
 
     public function __construct($client) {
         $this->client = $client;
@@ -50,9 +49,11 @@ class users
         $users = json_decode(json_encode($users), false);
 
         foreach ($users as $user) {
-            if (!$this->user_exists($user)) {
-                $this->create_user($user);
+            if ($this->user_exists($user)) {
+                continue;
             }
+
+            $this->create_user($user);
         }
     }
 
@@ -65,12 +66,12 @@ class users
         $api = '/api/v1/users.create';
 
         $data = array(
-            "name" => $user->firstname . " " . $user->lastname,
-            "username" => explode('@', $user->email)[0],
-            "email" => $user->email,
-            "verified" => true,
-            "password" => substr(str_shuffle(md5(microtime())), 0, 6),
-            "joinDefaultChannels" => false
+                'name' => $user->firstname . ' ' . $user->lastname,
+                'username' => explode('@', $user->email)[0],
+                'email' => $user->email,
+                'verified' => true,
+                'password' => substr(str_shuffle(md5(microtime())), 0, 6),
+                'joinDefaultChannels' => false
         );
 
         $header = $this->client->authentication_headers();
@@ -81,37 +82,10 @@ class users
         if (!$response->success) {
             $object = new \stdClass();
             $object->code = get_string('user_creation', 'local_rocketchat');
-            $object->error = "[ user_id - " . $user->id . " | email - " . $user->email . "]" . $response->error;
+            $object->error = '[ user_id - ' . $user->id . ' | email - ' . $user->email . ']' . $response->error;
 
             array_push($this->errors, $object);
         }
-    }
-
-    /**
-     * @param $userid
-     * @throws \dml_exception
-     */
-    public function deactivate_user($userid) {
-        $this->_update_user_activity($userid, true);
-    }
-
-    /**
-     * @param $userid
-     * @throws \dml_exception
-     */
-    public function activate_user($userid) {
-        $this->_update_user_activity($userid, false);
-    }
-
-    /**
-     * @param $user
-     * @return |null
-     * @throws \dml_exception
-     */
-    public function get_user($user) {
-        $rocketchatuser = $this->_has_user($user->id);
-
-        return $rocketchatuser;
     }
 
     /**
@@ -120,7 +94,7 @@ class users
      * @throws \dml_exception
      */
     public function user_exists($user) {
-        foreach ($this->_existing_users() as $existinguser) {
+        foreach ($this->get_existing_users() as $existinguser) {
             $username = $user->username;
 
             if (count(explode('@', $user->email)) > 1) {
@@ -139,7 +113,7 @@ class users
      * @return mixed
      * @throws \dml_exception
      */
-    private function _existing_users() {
+    private function get_existing_users() {
         $api = '/api/v1/users.list';
 
         $header = $this->client->authentication_headers();
@@ -154,10 +128,10 @@ class users
      * @return bool
      * @throws \dml_exception
      */
-    public function _has_user($userid) {
+    public function get_user($userid) {
         global $DB;
 
-        $user = $DB->get_record('user', array("id" => $userid));
+        $user = $DB->get_record('user', ['id' => $userid]);
         $username = $user->username;
 
         if (count(explode('@', $user->email)) > 1) {
@@ -182,15 +156,15 @@ class users
      * @param $isactive
      * @throws \dml_exception
      */
-    private function _update_user_activity($userid, $isactive) {
-        $rocketchatuser = $this->_has_user($userid);
+    public function update_user_activity($userid, $isactive) {
+        $rocketchatuser = $this->get_user($userid);
 
         if ($rocketchatuser) {
             $api = '/api/v1/users.update';
-            $data = array(
-                "userId" => $rocketchatuser->_id,
-                "active" => $isactive
-            );
+            $data = [
+                    'userId' => $rocketchatuser->_id,
+                    'active' => $isactive
+            ];
 
             $header = $this->client->authentication_headers();
             array_push($header, 'Content-Type: application/json');

@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die;
 class sync {
 
     private $client;
-    private $errors = array();
+    private $errors = [];
 
     /**
      * sync constructor.
@@ -39,6 +39,10 @@ class sync {
      */
     public function __construct() {
         $this->client = new client();
+    }
+
+    private function reset_errors() {
+        $this->errors = [];
     }
 
     /**
@@ -50,8 +54,7 @@ class sync {
     public function sync_pending_courses() {
         global $DB;
 
-        $rocketchatcourses = $DB->get_records('local_rocketchat_courses', array("pendingsync" => true), '', '*');
-
+        $rocketchatcourses = $DB->get_records('local_rocketchat_courses', ['pendingsync' => true]);
         foreach ($rocketchatcourses as $rocketchatcourse) {
             $this->sync_pending_course($rocketchatcourse->course);
         }
@@ -67,15 +70,26 @@ class sync {
     public function sync_pending_course($courseid) {
         global $DB;
 
-        $rocketchatcourse = $DB->get_record('local_rocketchat_courses', array("course" => $courseid));
-
-        if (!$rocketchatcourse) {
+        if (!$rocketchatcourse = $DB->get_record('local_rocketchat_courses', ['course' => $courseid])) {
             $rocketchatcourseid = $this->create_rocketchat_course($courseid);
-            $rocketchatcourse = $DB->get_record('local_rocketchat_courses', array("id" => $rocketchatcourseid));
+            $rocketchatcourse = $DB->get_record('local_rocketchat_courses', ['id' => $rocketchatcourseid]);
         }
 
-        $this->_run_sync($rocketchatcourse);
-        $this->_record_result($rocketchatcourse);
+        $this->run_sync($rocketchatcourse);
+        $this->record_result($rocketchatcourse);
+    }
+
+    /**
+     * @param $courseid
+     * @return bool
+     * @throws \dml_exception
+     */
+    public static function is_event_based_sync_on_course($courseid) {
+        global $DB;
+
+        $rocketchatcourse = $DB->get_record('local_rocketchat_courses', ['course' => $courseid]);
+
+        return $rocketchatcourse ? $rocketchatcourse->eventbasedsync : false;
     }
 
     /**
@@ -101,50 +115,53 @@ class sync {
      * @throws \invalid_parameter_exception
      * @throws \moodle_exception
      */
-    private function _run_sync($rocketchatcourse) {
+    private function run_sync($rocketchatcourse) {
         global $DB;
 
-        $course = $DB->get_record('course', array("id" => $rocketchatcourse->course));
-
-        if ($this->client->authenticated) {
-            $channelapi = new integration\channels($this->client);
-            $channelapi->create_channels_for_course($rocketchatcourse);
-            $this->errors = array_merge($this->errors, $channelapi->errors);
-
-            $userapi = new integration\users($this->client);
-            $userapi->create_users_for_course($rocketchatcourse);
-            $this->errors = array_merge($this->errors, $userapi->errors);
-
-            $subscriptionapi = new integration\subscriptions($this->client);
-            $subscriptionapi->add_subscriptions_for_course($course);
-            $this->errors = array_merge($this->errors, $subscriptionapi->errors);
-        } else {
-            $object = array();
+        if (!$this->client->authenticated) {
+            $object = [];
             $object->code = get_string('auth_failure', 'local_rocketchat');
             $object->error = get_string('connection_failure', 'local_rocketchat');
+
             array_push($this->errors, $object);
+
+            return false;
         }
+
+        $course = $DB->get_record('course', ['id' => $rocketchatcourse->course]);
+
+        $channelapi = new integration\channels($this->client);
+        $channelapi->create_channels_for_course($rocketchatcourse);
+        $this->errors = array_merge($this->errors, $channelapi->errors);
+
+        $userapi = new integration\users($this->client);
+        $userapi->create_users_for_course($rocketchatcourse);
+        $this->errors = array_merge($this->errors, $userapi->errors);
+
+        $subscriptionapi = new integration\subscriptions($this->client);
+        $subscriptionapi->add_subscriptions_for_course($course);
+        $this->errors = array_merge($this->errors, $subscriptionapi->errors);
     }
 
     /**
      * @param $rocketchatcourse
      * @throws \dml_exception
      */
-    private function _record_result($rocketchatcourse) {
+    private function record_result($rocketchatcourse) {
         if (count($this->errors) == 0) {
-            $this->_pass_sync($rocketchatcourse);
+            $this->pass_sync($rocketchatcourse);
         } else {
-            $this->_fail_sync($rocketchatcourse);
+            $this->fail_sync($rocketchatcourse);
         }
 
-        $this->_reset_errors();
+        $this->reset_errors();
     }
 
     /**
      * @param $rocketchatcourse
      * @throws \dml_exception
      */
-    private function _pass_sync($rocketchatcourse) {
+    private function pass_sync($rocketchatcourse) {
         global $DB;
 
         $rocketchatcourse->pendingsync = 0;
@@ -158,12 +175,12 @@ class sync {
      * @param $rocketchatcourse
      * @throws \dml_exception
      */
-    private function _fail_sync($rocketchatcourse) {
+    private function fail_sync($rocketchatcourse) {
         global $DB;
 
-        $errorstring = "";
+        $errorstring = '';
         foreach ($this->errors as $error) {
-            $errorstring = $errorstring . "[" . $error->code  . "] " . $error->error . "\r\n";
+            $errorstring = $errorstring . '[' . $error->code  . '] ' . $error->error . "\r\n";
         }
 
         $rocketchatcourse->pendingsync = 0;
@@ -171,9 +188,5 @@ class sync {
         $rocketchatcourse->error = $errorstring;
 
         $DB->update_record('local_rocketchat_courses', $rocketchatcourse);
-    }
-
-    private function _reset_errors() {
-        $this->errors = array();
     }
 }
