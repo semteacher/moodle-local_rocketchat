@@ -70,7 +70,7 @@ class local_rocketchat_external extends external_api {
      * @throws coding_exception
      */
     public static function set_rocketchat_course_sync_returns() {
-        return new external_value(PARAM_TEXT, get_string('coursesync_returns', 'local_rocketchat'));
+        return new external_value(PARAM_TEXT, get_string('sync_returns', 'local_rocketchat'));
     }
 
     /**

@@ -35,45 +35,36 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = array(
-    'local_rocketchat_set_rocketchat_event_based_sync' => array(
-        'classname'   => 'local_rocketchat_external',
-        'methodname'  => 'set_rocketchat_event_based_sync',
-        'classpath'   => 'local/rocketchat/externallib.php',
-        'description' => 'Sets whether or not a course should integrate based on events with rocket chat.',
-        'type'        => 'update'
-    ),
-    'local_rocketchat_set_rocketchat_course_sync' => array(
-        'classname'   => 'local_rocketchat_external',
-        'methodname'  => 'set_rocketchat_course_sync',
-        'classpath'   => 'local/rocketchat/externallib.php',
-        'description' => 'Sets whether or not a course should integrate with rocket chat.',
-        'type'        => 'update'
-    ),
-    'local_rocketchat_set_rocketchat_role_sync' => array(
-        'classname'   => 'local_rocketchat_external',
-        'methodname'  => 'set_rocketchat_role_sync',
-        'classpath'   => 'local/rocketchat/externallib.php',
-        'description' => 'Sets whether or not a role should integrate with rocket chat.',
-        'type'        => 'update'
-    ),
-    'local_rocketchat_manually_trigger_sync' => array(
-        'classname'   => 'local_rocketchat_external',
-        'methodname'  => 'manually_trigger_sync',
-        'classpath'   => 'local/rocketchat/externallib.php',
-        'description' => 'Syncs course with rocket chat.',
-        'type'        => 'update'
-    )
-);
-
-// We define the services to install as pre-build services. A pre-build service is not editable by administrator.
-$services = array(
-    'Rocket Chat Web Services' => array(
-        'functions' => array (
-            'local_rocketchat_set_rocketchat_course_sync',
-            'local_rocketchat_set_rocketchat_role_sync',
-            'local_rocketchat_manually_trigger_sync',
-            'local_rocketchat_set_rocketchat_event_based_sync'),
-        'restrictedusers'   => 0,
-        'enabled'           => 1
+        'local_rocketchat_set_rocketchat_event_based_sync' => array(
+                'classname' => 'local_rocketchat_external',
+                'methodname' => 'set_rocketchat_event_based_sync',
+                'classpath' => 'local/rocketchat/externallib.php',
+                'description' => 'Sets whether or not a course should integrate based on events with rocket chat.',
+                'type' => 'update',
+                'ajax' => true,
+        ),
+        'local_rocketchat_set_rocketchat_course_sync' => array(
+                'classname' => 'local_rocketchat_external',
+                'methodname' => 'set_rocketchat_course_sync',
+                'classpath' => 'local/rocketchat/externallib.php',
+                'description' => 'Sets whether or not a course should integrate with rocket chat.',
+                'type' => 'update',
+                'ajax' => true,
+        ),
+        'local_rocketchat_set_rocketchat_role_sync' => array(
+                'classname' => 'local_rocketchat_external',
+                'methodname' => 'set_rocketchat_role_sync',
+                'classpath' => 'local/rocketchat/externallib.php',
+                'description' => 'Sets whether or not a role should integrate with rocket chat.',
+                'type' => 'update',
+                'ajax' => true,
+        ),
+        'local_rocketchat_manually_trigger_sync' => array(
+                'classname' => 'local_rocketchat_external',
+                'methodname' => 'manually_trigger_sync',
+                'classpath' => 'local/rocketchat/externallib.php',
+                'description' => 'Syncs course with rocket chat.',
+                'type' => 'update',
+                'ajax' => true,
         )
-    );
+);
