@@ -35,11 +35,11 @@ $string['coursesyncparam_pendingsync'] = 'Highlights if a course is pending sync
 $string['coursesyncparam_requiresync'] = 'Highlights if a course is requiring sync';
 $string['coursesyncparam_enentbasedsync'] = 'Highlights if a course has event based sync active';
 $string['sync_returns'] = 'Whether or not the update was successful or not';
-$string['auth_failure'] = 'Rocket.Chat Integration - authentication failure';
+$string['auth_failure'] = 'Rocket.Chat integration - authentication failure';
 $string['connection_failure'] = 'Failed to establish a client connection with the Rocket.Chat server';
-$string['user_creation'] = 'Rocket.Chat Integration - user creation';
-$string['channel_creation'] = 'Rocket.Chat Integration - channel creation';
-$string['subscription_creation'] = 'Rocket.Chat Integration - subscription creation';
+$string['user_creation'] = 'Rocket.Chat integration - user creation';
+$string['channel_creation'] = 'Rocket.Chat integration - channel creation';
+$string['subscription_creation'] = 'Rocket.Chat integration - subscription creation';
 $string['linkaccount'] = 'Rocket.Chat preferences';
 $string['linkaccount_unexpectedresult'] = 'There was a problem connecting to your Rocket.Chat account. Please check the credentials and try again.';
 $string['linkaccount_unexpectedmessage'] = '<br/><br/>Rocket.Chat returned the error: "{$a}"';
@@ -70,25 +70,25 @@ $string['password'] = 'Password';
 $string['password_desc'] = 'Specified password for the given user.';
 $string['allowexternalconnection'] = 'External connection';
 $string['allowexternalconnection_desc'] = 'If enabled, users can <a href="/local/rocketchat/linkaccount.php" target="_blank">connect</a> to the Rocket.Chat instance and store the retrieved token in Moodle. With this setting, your users must link only once the Rocket.Chat account.';
-$string['groupregex'] = 'Group Regex Filters';
+$string['groupregex'] = 'Group Regex filters';
 $string['groupregex_desc'] = 'Used for matching which groups should be sync to Rocket.Chat:<ul><li>/all/</li><li>/coach group [a-z][0-9]/</li><li>/example project group [0-9][0-9]/</li></ul>';
 
 // Course integration.
-$string['heading_course'] = 'Course Integration';
+$string['heading_course'] = 'Course integration';
 $string['course_desc'] = 'Manage integration between Moodle and Rocket.Chat. Specify which users and courses require Rocket.Chat integration and manually trigger sync.';
 $string['coursetable_column_1'] = 'Course';
-$string['coursetable_column_2'] = 'Event Based Sync';
-$string['coursetable_column_3'] = 'Pending Sync';
-$string['coursetable_column_4'] = 'Last Sync Date';
+$string['coursetable_column_2'] = 'Event based sync';
+$string['coursetable_column_3'] = 'Pending sync';
+$string['coursetable_column_4'] = 'Last sync date';
 $string['courseinfo_1'] = 'Courses with event based sync active will be affected by certain events - group_member_added, group_member_removed and user_enrolment_updated. Ensure that you have done an initial sync before turning it on.';
 $string['courseinfo_2'] = 'Courses pending sync will be sync\'d to rocketchat on the next cron execution in the background. Pending sync will be removed after syncing.';
 $string['courseinfo_3'] = 'Hovering on the three dots will display any errors.';
 $string['courseinfo_4'] = 'Manual sync execution will be run immediately';
-$string['button_sync'] = 'Manual Sync';
+$string['button_sync'] = 'Manual sync';
 
 // Role integration.
-$string['heading_role'] = 'Role Integration';
+$string['heading_role'] = 'Role integration';
 $string['role_desc'] = 'Manage integration between Moodle and Rocket.Chat. Specify which roles are included in the Rocket.Chat integration.';
 $string['roletable_column_1'] = 'Course';
-$string['roletable_column_2'] = 'Requires Sync';
+$string['roletable_column_2'] = 'Requires sync';
 $string['roleinfo_1'] = 'Checked roles will be included in sync. Removing a role will not remove users already uploaded to Rocket.Chat.';
