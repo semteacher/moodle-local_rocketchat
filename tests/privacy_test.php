@@ -20,7 +20,7 @@
  * @package    local_rocketchat
  * @category   test
  * @copyright  2021 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
- * @license    MIT License
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 use core_privacy\local\request\writer;
@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
  * Unit tests for the local_rocketchat implementation of the privacy API.
  *
  * @copyright  2021 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
- * @license    MIT License
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class local_rocketchat_privacy_testcase extends \core_privacy\tests\provider_testcase {
 

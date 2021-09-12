@@ -19,7 +19,7 @@
  *
  * @package     local_rocketchat
  * @copyright   2021 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
- * @license     MIT License
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_rocketchat\form;

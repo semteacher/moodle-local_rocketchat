@@ -20,7 +20,7 @@
  * @package     local_rocketchat
  * @copyright   2016 GetSmarter {@link http://www.getsmarter.co.za}
  * @author      2019 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
- * @license     MIT License
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace local_rocketchat\task;
@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
  * @package     local_rocketchat
  * @copyright   2016 GetSmarter {@link http://www.getsmarter.co.za}
  * @author      2019 Adrian Perez <me@adrianperez.me> {@link https://adrianperez.me}
- * @license     MIT License
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class sync_students extends \core\task\scheduled_task {
 
