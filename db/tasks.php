@@ -29,14 +29,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$tasks = array(
-    array(
+$tasks = [
+    [
         'classname' => 'local_rocketchat\task\sync_students',
         'blocking' => 0,
-        'minute' => '01',
+        'minute' => 'R',
         'hour' => '*',
         'day' => '*',
         'dayofweek' => '*',
         'month' => '*'
-    )
-);
+    ]
+];
