@@ -52,8 +52,13 @@ $string['rocketchat:manage'] = 'Manage Rocket.chat global settings';
 $string['rocketchat:linkaccount'] = 'Manage own linked Rocket.Chat account';
 
 // Privacy.
-$string['privacy:metadata:preference:local_rocketchat_external_user'] = 'The email associated with the Rocket.Chat account.';
-$string['privacy:metadata:preference:local_rocketchat_external_token'] = 'The external token returned from linking the Rocket.Chat account.';
+$string['privacy:metadata:local_rocketchat'] = 'User and API credentials sent to external Rocket.Chat host.';
+$string['privacy:metadata:local_rocketchat_api:username'] = 'The username associated with the Rocket.Chat API account.';
+$string['privacy:metadata:local_rocketchat_api:password'] = 'The password associated with the Rocket.Chat API account.';
+$string['privacy:metadata:local_rocketchat_user:username'] = 'The email associated with the Rocket.Chat user account.';
+$string['privacy:metadata:local_rocketchat_user:password'] = 'The password associated with the Rocket.Chat user account.';
+$string['privacy:metadata:preference:local_rocketchat_external_user'] = 'The email associated with the Rocket.Chat user account.';
+$string['privacy:metadata:preference:local_rocketchat_external_token'] = 'The external token returned from linking the Rocket.Chat user account.';
 
 // Settings page.
 $string['heading_api'] = 'API Connection';

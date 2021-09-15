@@ -50,6 +50,13 @@ class provider implements \core_privacy\local\metadata\provider, user_preference
         $collection->add_user_preference('local_rocketchat_external_token',
                 'privacy:metadata:preference:local_rocketchat_external_token');
 
+        $collection->link_external_location('local_rocketchat', [
+                'apiusername' => 'privacy:metadata:local_rocketchat_api:username',
+                'apipassword' => 'privacy:metadata:local_rocketchat_api:password',
+                'userusername' => 'privacy:metadata:local_rocketchat_user:username',
+                'userpassword' => 'privacy:metadata:local_rocketchat_user:password',
+        ], 'privacy:metadata:local_rocketchat');
+
         return $collection;
     }
 
